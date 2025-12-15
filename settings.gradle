@@ -1,0 +1,4 @@
+rootProject.name = 'banking-system-backend'
+
+include 'ms-clientes'
+include 'ms-cuentas'

@@ -1,0 +1,177 @@
+{
+  "info": {
+    "name": "Prueba-bank",
+    "description": "",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Cliente",
+      "item": [
+        {
+          "name": "Crear Cliente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{host_clientes}}/api/v1/customers",
+              "protocol": "",
+              "host": [
+                "{{host_clientes}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "    {\n      \"name\": \"Marianela Montalvo\",\n      \"gender\": \"Femenino\",\n      \"identification\": \"097548965\",\n      \"address\": \"Amazonas y NNUU\",\n      \"phone\": \"097548965\",\n      \"password\": \"5678\",\n      \"status\": true\n    }\n    ",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Obtener Cliente",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{host_clientes}}/api/v1/customers/4",
+              "protocol": "",
+              "host": [
+                "{{host_clientes}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "customers",
+                "4"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cuenta",
+      "item": [
+        {
+          "name": "Crear Cuenta",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{host_cuentas}}/api/v1/accounts",
+              "protocol": "",
+              "host": [
+                "{{host_cuentas}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "accounts"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Movimiento Debito",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{host_cuentas}}/api/v1/movements",
+              "protocol": "",
+              "host": [
+                "{{host_cuentas}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "movements"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Reporte Estado Cuenta",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "",
+            "url": {
+              "raw": "{{host_cuentas}}/reports?clientId=1&startDate=2024-01-01&endDate=2025-12-31",
+              "protocol": "",
+              "host": [
+                "{{host_cuentas}}"
+              ],
+              "path": [
+                "reports?clientId=1&startDate=2024-01-01&endDate=2025-12-31"
+              ],
+              "query": [
+                {
+                  "key": "clientId",
+                  "value": "1"
+                },
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2025-12-31"
+                }
+              ],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "host_clientes",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "host_cuentas",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}

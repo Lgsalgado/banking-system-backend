@@ -1,0 +1,135 @@
+openapi: 3.0.3
+info:
+  title: Client Microservice
+  description: API for managing Customers and Persons
+  version: 1.0.0
+servers:
+  - url: http://localhost:8081
+    description: Local Server
+
+paths:
+  /api/v1/customers:
+    get:
+      tags:
+        - Customer
+      summary: Get all customers
+      operationId: getAllCustomers
+      responses:
+        '200':
+          description: List found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerResponse'
+    post:
+      tags:
+        - Customer
+      summary: Create a new customer
+      operationId: createCustomer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+
+  /api/v1/customers/{id}:
+    get:
+      tags:
+        - Customer
+      summary: Get customer by ID
+      operationId: getCustomerById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Customer found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+        '404':
+          description: Customer not found
+    put:
+      tags:
+        - Customer
+      summary: Update customer
+      operationId: updateCustomer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        '200':
+          description: Customer updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerResponse'
+    delete:
+      tags:
+        - Customer
+      summary: Delete customer
+      operationId: deleteCustomer
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Customer deleted
+
+components:
+  schemas:
+    Person:
+      type: object
+      required: [name, gender, identification, address, phone]
+      properties:
+        name: { type: string }
+        gender: { type: string }
+        identification: { type: string }
+        address: { type: string }
+        phone: { type: string }
+
+    CustomerRequest:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          required: [password, status]
+          properties:
+            password: { type: string }
+            status: { type: boolean }
+
+    CustomerResponse:
+      allOf:
+        - $ref: '#/components/schemas/Person'
+        - type: object
+          properties:
+            customerId: { type: integer, format: int64 }
+            status: { type: boolean }
