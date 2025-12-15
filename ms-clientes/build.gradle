@@ -96,9 +96,19 @@ jacocoTestReport {
 pitest {
     junit5PluginVersion = '1.2.1'
     targetClasses = ['com.bank.clients.*']
+    excludedClasses = [
+            'com.bank.clients.config.*',
+            'com.bank.clients.model.dto.*',
+            'com.bank.clients.controller.api.*',
+            'com.bank.clients.MsClientesApplication'
+    ]
     threads = 4
     outputFormats = ['XML', 'HTML']
     timestampedReports = true
 }
 
 compileJava.dependsOn tasks.openApiGenerate
+
+tasks.named('build') {
+    dependsOn 'pitest'
+}
