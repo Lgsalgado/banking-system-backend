@@ -1,0 +1,1 @@
+Carpeta para los entregables de la prueba técnica.

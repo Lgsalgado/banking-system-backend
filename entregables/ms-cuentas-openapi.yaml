@@ -1,0 +1,239 @@
+openapi: 3.0.3
+info:
+  title: Accounts Microservice
+  description: API for managing Accounts and Movements
+  version: 1.0.0
+servers:
+  - url: http://localhost:8082
+    description: Local Server
+
+paths:
+  /api/v1/accounts:
+    get:
+      tags:
+        - Account
+      summary: Get all accounts
+      operationId: getAllAccounts
+      responses:
+        '200':
+          description: List found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountResponse'
+    post:
+      tags:
+        - Account
+      summary: Create a new account
+      operationId: createAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+
+  /api/v1/accounts/{id}:
+    get:
+      tags:
+        - Account
+      summary: Get account by ID
+      operationId: getAccountById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Account found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+        '404':
+          description: Account not found
+    put:
+      tags:
+        - Account
+      summary: Update account
+      operationId: updateAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountRequest'
+      responses:
+        '200':
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountResponse'
+    delete:
+      tags:
+        - Account
+      summary: Delete account
+      operationId: deleteAccount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Account deleted
+
+  /api/v1/movements:
+    post:
+      tags:
+        - Movement
+      summary: Create a new movement
+      operationId: createMovement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovementRequest'
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovementResponse'
+        '400':
+          description: Bad request (e.g., insufficient funds)
+
+  /reports:
+    get:
+      tags:
+        - Reports
+      summary: Generate a statement of account for a client within a date range
+      operationId: getAccountStatement
+      parameters:
+        - name: clientId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: startDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Report generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountStatementReport'
+        '404':
+          description: Client or Accounts not found
+
+components:
+  schemas:
+    AccountRequest:
+      type: object
+      required: [accountNumber, accountType, initialBalance, status, clientId]
+      properties:
+        accountNumber: { type: string }
+        accountType: { type: string, enum: [Ahorro, Corriente] }
+        initialBalance: { type: number, format: double }
+        status: { type: boolean }
+        clientId: { type: integer, format: int64 }
+
+    AccountResponse:
+      type: object
+      properties:
+        accountId: { type: integer, format: int64 }
+        accountNumber: { type: string }
+        accountType: { type: string, enum: [Ahorro, Corriente] }
+        initialBalance: { type: number, format: double }
+        status: { type: boolean }
+        clientId: { type: integer, format: int64 }
+
+    MovementRequest:
+      type: object
+      required: [accountNumber, movementType, value]
+      properties:
+        accountNumber: { type: string }
+        movementType: { type: string, enum: [Debito, Credito] }
+        value: { type: number, format: double }
+
+    MovementResponse:
+      type: object
+      properties:
+        movementId: { type: integer, format: int64 }
+        date: { type: string, format: date-time }
+        movementType: { type: string }
+        value: { type: number, format: double }
+        balance: { type: number, format: double }
+
+    AccountStatementReport:
+      type: object
+      properties:
+        clientName: { type: string }
+        clientId: { type: integer, format: int64 }
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountReportDetails'
+
+    AccountReportDetails:
+      type: object
+      properties:
+        accountNumber: { type: string }
+        accountType: { type: string }
+        initialBalance: { type: number, format: double }
+        status: { type: boolean }
+        movements:
+          type: array
+          items:
+            $ref: '#/components/schemas/MovementReportDetails'
+
+    MovementReportDetails:
+      type: object
+      properties:
+        date: { type: string, format: date-time }
+        movementType: { type: string }
+        value: { type: number, format: double }
+        balance: { type: number, format: double }
+    
+    CustomerResponse:
+      type: object
+      properties:
+        customerId: { type: integer, format: int64 }
+        name: { type: string }
+        status: { type: boolean }
